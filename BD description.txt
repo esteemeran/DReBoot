@@ -19,10 +19,16 @@ CREATE TABLE `achievements`
 CREATE TABLE `GameResult` 
 ( 
 	`user` int(4) not null,
+	FOREIGN KEY (`user`)  REFERENCES `users`(`id`),
+	`walkthrough` int(4)
+) ENGINE=InnoDB Auto_increment=1 default charset=utf8; 
+
+CREATE TABLE `ReachedAch` 
+( 
+	`user` int(4) not null,
 	`achievement` int(4) not null,
 	FOREIGN KEY (`user`)  REFERENCES `users`(`id`),
 	FOREIGN KEY (`achievement`)  REFERENCES `achievements`(`id`), 
-	`walkthrough` int(4)
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8; 
 
 CREATE TABLE `tasktypes` 
