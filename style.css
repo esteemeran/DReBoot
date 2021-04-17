@@ -1,0 +1,65 @@
+
+.button7 {
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  padding: .8em 1em calc(.8em + 3px);
+  border-radius: 3px;
+  background: rgb(64,199,129);
+  box-shadow: 0 -3px rgb(53,167,110) inset;
+  transition: 0.2s;
+} 
+.button7:hover { background: rgb(53, 167, 110); }
+.button7:active {
+  background: rgb(33,147,90);
+  box-shadow: 0 3px rgb(33,147,90) inset;
+}
+
+.button24 {
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  padding: .5em 2em;
+  outline: none;
+  border-width: 2px 0;
+  border-style: solid none;
+  border-color: #FDBE33 #000 #D77206;
+  border-radius: 6px;
+  background: linear-gradient(#F3AE0F, #E38916) #E38916;
+  transition: 0.2s;
+} 
+.button24:hover { background: linear-gradient(#f5ae00, #f59500) #f5ae00; }
+.button24:active { background: linear-gradient(#f59500, #f5ae00) #f59500; }
+
+.button19 {
+  display: inline-block;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 0 -1px rgba(0,0,0,.5);
+  user-select: none;
+  padding: .7em 1.5em;
+  border: 1px solid rgb(80,32,0);
+  border-radius: 5px;
+  outline: none;
+  background: rgb(147,80,36) linear-gradient(rgb(106,58,26), rgb(147,80,36) 80%);
+  box-shadow:
+   0 6px rgb(86,38,6),
+   0 3px 15px rgba(0,0,0,.4),
+   inset 0 1px rgba(255,255,255,.3),
+   inset 0 0 3px rgba(255,255,255,.5);
+  transition: .2s;
+} 
+.button19:hover {
+  background: rgb(167,91,41) linear-gradient(rgb(126,69,31), rgb(167,91,41) 80%);
+}
+.button19:active {
+  background: rgb(120,63,25) linear-gradient(rgb(120,63,25) 20%, rgb(167,91,41));
+  box-shadow:
+   0 2px rgb(86,38,6),
+   0 1px 6px rgba(0,0,0,.4),
+   inset 0 1px rgba(255,255,255,.3),
+   inset 0 0 3px rgba(255,255,255,.5);
+  -webkit-transform: translate(0, 4px);
+  transform: translate(0, 4px);
+}
