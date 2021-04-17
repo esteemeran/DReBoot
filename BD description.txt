@@ -18,17 +18,17 @@ CREATE TABLE `achievements`
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8; 
 CREATE TABLE `GameResult` 
 ( 
-	`user` int(4) not null,
-	FOREIGN KEY (`user`)  REFERENCES `users`(`id`),
+	`userID` int(4) not null,
+	FOREIGN KEY (`userID`)  REFERENCES `users`(`id`),
 	`walkthrough` int(4)
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8; 
 
 CREATE TABLE `ReachedAch` 
 ( 
-	`user` int(4) not null,
-	`achievement` int(4) not null,
-	FOREIGN KEY (`user`)  REFERENCES `users`(`id`),
-	FOREIGN KEY (`achievement`)  REFERENCES `achievements`(`id`), 
+	`userID` int(4) not null,
+	`achievementID` int(4) not null,
+	FOREIGN KEY (`userID`)  REFERENCES `users`(`id`),
+	FOREIGN KEY (`achievementID`)  REFERENCES `achievements`(`id`), 
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8; 
 
 CREATE TABLE `tasktypes` 
@@ -40,21 +40,21 @@ CREATE TABLE `tasktypes`
 CREATE TABLE `tasks` 
 ( 
 	`id` int(4) auto_increment not null,
-	`type` int(4) not null,
+	`typeID` int(4) not null,
 	`name` varchar(100) not null,
 	`descr` varchar(300),
 	`question` boolean,
-	FOREIGN KEY (`type`)  REFERENCES `tasktypes`(`id`),
+	FOREIGN KEY (`typeID`)  REFERENCES `tasktypes`(`id`),
 	PRIMARY KEY(id)
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8;
 CREATE TABLE `answers` 
 ( 
 	`id` int(4) auto_increment not null,
-	`task` int(4) not null,
+	`taskID` int(4) not null,
 	`descr` varchar(150),
 	`value` int(4), 
 	`action` boolean,
-	FOREIGN KEY (`task`)  REFERENCES `tasks`(`id`),
+	FOREIGN KEY (`taskID`)  REFERENCES `tasks`(`id`),
 	PRIMARY KEY(id)
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8; 
 
@@ -67,10 +67,10 @@ CREATE TABLE `terms`
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8; 
 CREATE TABLE `termUsage` 
 ( 
-	`term` int(4) not null,
-	`task` int(4) not null,
-	FOREIGN KEY (`term`)  REFERENCES `terms`(`id`),
-	FOREIGN KEY (`task`)  REFERENCES `tasks`(`id`)
+	`termID` int(4) not null,
+	`taskID` int(4) not null,
+	FOREIGN KEY (`termID`)  REFERENCES `terms`(`id`),
+	FOREIGN KEY (`taskID`)  REFERENCES `tasks`(`id`)
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8; 
 
 CREATE TABLE `story` 
@@ -83,29 +83,29 @@ CREATE TABLE `story`
 CREATE TABLE `storytales` 
 ( 
 	`id` int(4) auto_increment not null,
-	`story` int(4) not null,
-	`task` int(4) not null,
+	`storyID` int(4) not null,
+	`taskID` int(4) not null,
 	`queue` int(4), 
-	FOREIGN KEY (`story`)  REFERENCES `story`(`id`),
-	FOREIGN KEY (`task`)  REFERENCES `tasks`(`id`),
+	FOREIGN KEY (`storyID`)  REFERENCES `story`(`id`),
+	FOREIGN KEY (`taskID`)  REFERENCES `tasks`(`id`),
 	PRIMARY KEY(id)	
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8;
 
 CREATE TABLE `saves` 
 ( 
 	`id` int(4) auto_increment not null,
-	`user` int(4) not null,
-	`storytales` int(4) not null,
-	FOREIGN KEY (`user`)  REFERENCES `users`(`id`),
-	FOREIGN KEY (`storytales`)  REFERENCES `storytales`(`id`),	
+	`userID` int(4) not null,
+	`storytalesID` int(4) not null,
+	FOREIGN KEY (`userID`)  REFERENCES `users`(`id`),
+	FOREIGN KEY (`storytalesID`)  REFERENCES `storytales`(`id`),	
 	PRIMARY KEY(id)
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8;
 
 CREATE TABLE `ILResult` 
 ( 
-	`user` int(4) not null,
-	`save` int(4) not null,
+	`userID` int(4) not null,
+	`saveID` int(4) not null,
 	`mark` int(4), 
-	FOREIGN KEY (`user`)  REFERENCES `users`(`id`),
-	FOREIGN KEY (`save`)  REFERENCES `saves`(`id`)	
+	FOREIGN KEY (`userID`)  REFERENCES `users`(`id`),
+	FOREIGN KEY (`saveID`)  REFERENCES `saves`(`id`)	
 ) ENGINE=InnoDB Auto_increment=1 default charset=utf8;
