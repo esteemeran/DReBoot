@@ -1,15 +1,30 @@
 // JavaScript source code
-var health = 50;
-var coins = 100;
-var currentState = -1;
-var possibbleMove = { answers: undefined }
-var reaction = false;
+var health, coins;
+var currentState, possibbleMove, reaction;
+var walkthroughs = 0;
 
-/* change to DB request */
+var defaultSet = function () {
+    health = 50;
+    coins = 100;
+    currentState = -1;
+    possibbleMove = { answers: undefined };
+    reaction = false;
+}
+defaultSet();
+
+var achievementCheck = function () {
+    var addition = '';
+    if (walkthroughs == 3) {
+        addition += imageStart + 'im/ach1.jpg' + imageEnd + textStart + '<b>ЛЮБОПЫТСТВО<b> <br /> Есть ли здесь еще что-нибудь? <br /> Кто знает...' + textEnd;
+    }
+    return addition;
+}
+
+/* change to DB request later*/
 const FromDB_task =
     [
         {
-            descr: "Ваша карта заблокирована из-за подозрительной активности. Чтобы снять блокировку, в течении 500 секунд вам необходимо пройти по ссылке https://***.***. Ваш ЦентроБанк",
+            descr: "Ваша карта заблокирована из-за подозрительной активности. <br />Чтобы снять блокировку, в течении 500 секунд вам необходимо пройти по ссылке https://***.***. <br />Ваш ЦентроБанк",
             im: true,
             question: true,
             answers: [
@@ -18,19 +33,20 @@ const FromDB_task =
          value: false,
          addhealth: -10,
          addcoins: -20,
+         skipNext: 0,
      },
  {
      descr: "Позвони в банк по горячей линии. Номер телефона указан на Вашей карте",
      value: true,
      addhealth: 10,
      addcoins: 20,
-
+     skipNext: 0,
  }
             ]
         }
         ,
 {
-    descr: "",
+    descr: "", //Мне нужно попасть к врачу. Единственный врач такой специальности принимает только в поликлинике, на другом конце города. Да и у меня нет много свободного времени. Что же мне делать?
     im: true,
     question: true,
     answers: [
@@ -39,20 +55,21 @@ const FromDB_task =
     value: false,
     addhealth: -40,
     addcoins: -40,
-
+    skipNext: 1,
 },
 {
     descr: "Не надо ездить к врачу. Сейчас очень опасная эпид обстановка. Само пройдет. ",
     value: false,
     addhealth: 40,
     addcoins: 10,
-
+    skipNext: 0,
 },
 {
     descr: "Воспользуйся порталом Госуслуги. Запишись на прием дистанционное . В удобное для тебя время. ",
     value: true,
     addhealth: 40,
     addcoins: 10,
+    skipNext: 0,
 }
     ]
 }
@@ -67,6 +84,13 @@ const FromDB_task =
     value: true,
     addhealth: 40,
     addcoins: 20,
+    skipNext: 0,
+}, {
+    descr: "Ой, что-то слишком сложно. Пойду я просто в поликлинику, может все-таки примут так",
+    value: false,
+    addhealth: -40,
+    addcoins: -40,
+    skipNext: 0,
 }]
        }
 
@@ -98,9 +122,13 @@ var nextPage = function (form, answer) {
     var result = "";
     var imName = "im/";
     if (answer != null) {
-        var act = possibbleMove.answers[answer]
+        var act = possibbleMove.answers[answer];
         coins += act.addcoins;
         health += act.addhealth;
+        if (health >= 100) {
+            health = 100;
+        }
+        currentState += act.skipNext;
         if (act.value) {
             imName += "right.jpg";
         } else {
@@ -123,13 +151,35 @@ var nextPage = function (form, answer) {
     }
 
     if (currentState >= maxStage) {
-        result += '<br />' + textStart + 'Вы молодец' + textEnd;
+        walkthroughs++;
+
+        var thouhght = "";
+        if (health >= 100) {
+            thouhght = 'Вы молодец';
+        }
+        else {
+            if (health >= 50) {
+                thouhght = 'Вы молодец, но есть еще к чему стремиться';
+            }
+            if (health < 50) {
+                thouhght = 'Отрицательный опыт тоже опыт';
+            }
+        }
+
+        result += '<br />' + textStart + thouhght + '<br /> Еще раз?' + textEnd;
+        result += '<br />' + imButStart + 'Конечно' + imButEnd;
+        result += '<button name="Action2" value="об игре" class="button19" onclick="mainPage(this.form)">' + 'В меню' + imButEnd;
+        result += achievementCheck();
+
+        defaultSet();
         form.innerHTML = result;
         return;
     }
 
     var tempTask = FromDB_task[currentState];
-    result += textStart + tempTask.descr + textEnd;
+    if (tempTask.descr != "") {
+        result += textStart + tempTask.descr + textEnd;
+    }
 
     if (FromDB_task[currentState].question) {
 
@@ -147,5 +197,17 @@ var nextPage = function (form, answer) {
         result += buttonStart + "Продолжить" + buttonMid + buttonEnd;
         reaction = false;
     }
+    form.innerHTML = result;
+}
+var aboutThis = function (form) {
+    var result = textStart + "Однопользовательская онлайн - игра. <br/>Главная героиня, Салика, попадает в трудные ситуации, в связи с отсутствием жизненного опыта.";
+    result += "<br/>Проведи Салику через все испытания и прокачай свою цифровую грамотность" + textEnd;
+    result += '<button name="Action2" value="об игре" class="button19" onclick="mainPage(this.form)">' + 'Назад' + imButEnd;
+    form.innerHTML = result;
+}
+var mainPage = function (form) {
+    var result = imageStart + 'im/hello.jpg" alt="Hello there"' + imageEnd;
+    result += '<button name="Action2" value="об игре" class="button19" onclick="nextPage(this.form)">' + 'Начать' + imButEnd;
+    result += '<button name="Action2" value="об игре" class="button19" onclick="aboutThis(this.form)">' + ' Об игре' + imButEnd;
     form.innerHTML = result;
 }
