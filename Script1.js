@@ -32,7 +32,7 @@ const FromDB_task =
          descr: "Срочно пройди по ссылке, возможно в этот момент крадут деньги с карты",
          value: false,
          addhealth: -10,
-         addcoins: -20,
+         addcoins: -60,
          skipNext: 0,
      },
  {
@@ -53,16 +53,16 @@ const FromDB_task =
 {
     descr: "Отправиться в поликлинику, а там можно будет попробовать попасть на прием",
     value: false,
-    addhealth: -40,
+    addhealth: -15,
     addcoins: -40,
     skipNext: 1,
 },
 {
     descr: "Не надо ездить к врачу. Сейчас очень опасная эпид обстановка. Само пройдет. ",
     value: false,
-    addhealth: 40,
-    addcoins: 10,
-    skipNext: 0,
+    addhealth: -40,
+    addcoins: 0,
+    skipNext: 1,
 },
 {
     descr: "Воспользуйся порталом Госуслуги. Запишись на прием дистанционное . В удобное для тебя время. ",
@@ -88,7 +88,7 @@ const FromDB_task =
 }, {
     descr: "Ой, что-то слишком сложно. Пойду я просто в поликлинику, может все-таки примут так",
     value: false,
-    addhealth: -40,
+    addhealth: -20,
     addcoins: -40,
     skipNext: 0,
 }]
@@ -128,6 +128,7 @@ var nextPage = function (form, answer) {
         if (health >= 100) {
             health = 100;
         }
+        
         currentState += act.skipNext;
         if (act.value) {
             imName += "right.jpg";
@@ -146,33 +147,16 @@ var nextPage = function (form, answer) {
         return;
     }
     else {
+        if (health <= 0) {
+            finish(form);
+            return;
+        }
         result = updateBars();
-        currentState++;
+           currentState++;
     }
 
     if (currentState >= maxStage) {
-        walkthroughs++;
-
-        var thouhght = "";
-        if (health >= 100) {
-            thouhght = 'Вы молодец';
-        }
-        else {
-            if (health >= 50) {
-                thouhght = 'Вы молодец, но есть еще к чему стремиться';
-            }
-            if (health < 50) {
-                thouhght = 'Отрицательный опыт тоже опыт';
-            }
-        }
-
-        result += '<br />' + textStart + thouhght + '<br /> Еще раз?' + textEnd;
-        result += '<br />' + imButStart + 'Конечно' + imButEnd;
-        result += '<button name="Action2" value="об игре" class="button19" onclick="mainPage(this.form)">' + 'В меню' + imButEnd;
-        result += achievementCheck();
-
-        defaultSet();
-        form.innerHTML = result;
+        finish(form);
         return;
     }
 
@@ -199,6 +183,37 @@ var nextPage = function (form, answer) {
     }
     form.innerHTML = result;
 }
+var finish = function (form) {
+    var result = updateBars();
+    walkthroughs++;
+   
+    var thouhght = "";
+    if (health >= 100) {
+        thouhght = 'Вы молодец';
+    }
+    else {
+        if (health >= 50) {
+            thouhght = 'Вы молодец, что помогли Салике, <br />но есть еще к чему стремиться';
+        }
+        if (health < 50) {
+            thouhght = 'Похоже, Салика чувствует себя не очень хорошо, <br /> но отрицательный опыт тоже опыт';
+        }
+    }
+    if (coins >= 100) {
+        thouhght += '<br /><br /> А ещё вы помогли Салике избежать лишних трат';
+    }
+    if (coins <= 10) {
+        thouhght += '<br /><br /> И Салика ещё осаталась без средств к существованию';
+    }
+
+    result += '<br />' + textStart + thouhght + '<br /> Еще раз?' + textEnd;
+    result += '<br />' + imButStart + 'Конечно' + imButEnd;
+    result += '<button name="Action2" value="об игре" class="button19" onclick="mainPage(this.form)">' + 'В меню' + imButEnd;
+    result += achievementCheck();
+
+    form.innerHTML = result;
+    defaultSet();
+}
 var aboutThis = function (form) {
     var result = textStart + "Однопользовательская онлайн - игра. <br/>Главная героиня, Салика, попадает в трудные ситуации, в связи с отсутствием жизненного опыта.";
     result += "<br/>Проведи Салику через все испытания и прокачай свою цифровую грамотность" + textEnd;
@@ -210,4 +225,5 @@ var mainPage = function (form) {
     result += '<button name="Action2" value="об игре" class="button19" onclick="nextPage(this.form)">' + 'Начать' + imButEnd;
     result += '<button name="Action2" value="об игре" class="button19" onclick="aboutThis(this.form)">' + ' Об игре' + imButEnd;
     form.innerHTML = result;
+    defaultSet();
 }
