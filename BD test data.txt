@@ -1,9 +1,0 @@
-INSERT INTO `user`(`fio`, `login`, `pswd`, `bday`) VALUES
-("Александр", "IronMan","pswd","2001-01-01");
-
-INSERT INTO `achievements`(`name`, `image`, `condition`) VALUES
-("Добро пожаловать", "achievement/начало.jpg","(GameResult.walkthrough == 1) && (ReachedAch.achievement != this.ID)"),
-("Любопытный", "achievement/любопытность.jpg","(ReachedAch.achievement != this.ID) && select(terms)"),
-("Level UP", "achievement/level Up.jpg","ILResults[n-1].mark > ILResults[n].mark"),
-("Целеустремленный", "achievement/Целеустремленность.jpg","(GameResult.walkthrough == 10) && (ReachedAch.achievement != this.ID)"),
-("Мастер", "achievement/Мастер.jpg","for each max(ILResults.mark) == 100");
